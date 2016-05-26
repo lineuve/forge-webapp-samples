@@ -185,6 +185,7 @@
 <script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/Helpers.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/Request.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/dm/Oss.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/print/Tasks.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/print/MeshAPI.js"></script>
 
@@ -199,6 +200,8 @@
 
 <script>
 
+	var bucketKey = 'mesh-healing-utility',
+			objectKey;
 
 	var problemsNamesArray = {
 		holes: "Holes",
@@ -361,16 +364,20 @@
 		$('#messageSuccess').show();
 
 		if (newMeshId != undefined) {
+			if (!common.isChrome()){
+				$('#downloadMesh').remove();
+			} else {
+
+				$('#downloadMesh').removeAttr("disabled");
+				$('#downloadMesh').on("click", (function () {
+
+					$('#downloadMesh').find('span').text("Downloading...");
+					exportAndDownload(newMeshId)
+				}));
+			}
 			$('#healing-buttons').removeClass('hidden');
-
-			$('#downloadMesh').removeAttr("disabled");
-			$('#downloadMesh').on("click", (function () {
-
-				$('#downloadMesh').find('span').text("Downloading...");
-				exportAndDownload(newMeshId)
-			}));
 		}
-	};
+	}
 
 	eventBroadCaster.broadcastEvent('repairIframe.analyze');
 
@@ -379,12 +386,14 @@
 
 		Autodesk.Forge.MeshAPI.exportMesh(newMeshId, 'stl_ascii').then(function (payloadExport) {
 			console.log(payloadExport);
-			var fileId = payloadExport.file_id;
+
 			$('#downloadMesh').find('span').text('Download');
-			ADSKSpark.Files.downloadFileByURL(fileId).then(function (downloadPayload) {
-				console.log(downloadPayload);
-				var downloadUrl = downloadPayload.download_url;
-				window.location.href = ADSKSpark.Helpers.changeHttpToHttps(downloadUrl);
+			Autodesk.Forge.OSS.downloadFile(bucketKey, objectKey).then(function (downloadPayload) {
+				var a = document.createElement('a');
+				a.download = objectKey;
+				a.href = "data:application/octet-stream;base64," + btoa(downloadPayload);
+				a.click();
+
 			});
 		});
 	};
@@ -395,12 +404,13 @@
 
 		//First let's see if we have a valid access token
 		if (!Autodesk.Forge.Client.isTokenExist()) {
-			location.href = '../../../plugins/login/login.html';
+			location.href = '../../plugins/login/login.html';
 		} else {
 			//Assume we provided meshId in URL
 			var urlParams = Autodesk.Forge.Helpers.extractParamsFromURL();
 			var meshId = urlParams.meshId || 0;
-			var isQuick = (urlParams.isQuick == "true");
+			var isQuick = urlParams.isQuick == "true";
+			objectKey = urlParams.objectKey;
 
 			common.setUIFunctionality();
 

@@ -242,7 +242,8 @@
 
 
 	var defaultBucketKey = 'mesh-healing-utility',
-			fileData;
+			fileData,
+			objectKey;
 
 	var allowedFileUploadSize = 1000 * 1000 * 100; //100MB
 
@@ -275,7 +276,7 @@
 		Autodesk.Forge.MeshAPI.importMesh(fileId, name, null, undefined).then(
 				function (mesh) {
 					if (mesh.id) {
-						window.location.href = 'repair.html?meshId=' + mesh.id + '&isQuick=' + isQuick;
+						window.location.href = 'repair.html?meshId=' + mesh.id + '&objectKey=' + objectKey + '&isQuick=' + isQuick;
 					} else {
 						errorResp(mesh);
 					}
@@ -301,6 +302,7 @@
 		};
 
 		var fileData = {fileName: file.name, requestBody: file};
+		objectKey = file.name;
 		console.log(fileData);
 
 		//get or create a bucket into which we upload the file
@@ -391,12 +393,12 @@
 		} else {
 			//Assume we provided assetId in URL
 			var urlParams = Autodesk.Forge.Helpers.extractParamsFromURL();
-			var fileId = urlParams['fileId'] ? urlParams['fileId'] : 0;
+			objectKey = urlParams['fileId'] ? urlParams['fileId'] : 0;
 			var fileUrl = urlParams['fileUrl'] ? urlParams['fileUrl'] : 0;
 
 			var isQuick = (urlParams.isQuick == 'true');
 
-			if (fileId) {
+			if (objectKey) {
 				$('.spinner-with-text').show();
 				$('.spinner').show();
 

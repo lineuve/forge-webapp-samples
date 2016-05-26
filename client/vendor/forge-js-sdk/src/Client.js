@@ -237,7 +237,7 @@ Autodesk.Forge = Autodesk.Forge || {};
                         if (!data.errorCode) {
                             var now = Date.now();
                             data.expires_at = now + parseInt(data.expires_in) * 1000;
-                            localStorage.setItem(ACCESS_TOKEN_KEY, data);
+                            localStorage.setItem(ACCESS_TOKEN_KEY, JSON.stringify(data));
                         }
                         return data;
                     });
