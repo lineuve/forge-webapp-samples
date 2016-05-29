@@ -234,7 +234,7 @@ Autodesk.Forge = Autodesk.Forge || {};
                 return Request(_refreshTokenUrl, null, {withCredentials: true})
                     .get()
                     .then(function (data) {
-                        if (!data.errorCode) {
+                        if (!data.error) {
                             var now = Date.now();
                             data.expires_at = now + parseInt(data.expires_in) * 1000;
                             localStorage.setItem(ACCESS_TOKEN_KEY, JSON.stringify(data));
@@ -272,6 +272,7 @@ Autodesk.Forge = Autodesk.Forge || {};
                             _this.refreshAccessToken()
                                 .then(function (refreshedToken) {
                                     if (refreshedToken.error) {
+                                        localStorage.removeItem(ACCESS_TOKEN_KEY);
                                         reject(new Error('Refresh token failed, please login again'));
                                     } else {
                                         resolve(formatAuthHeader(refreshedToken));
