@@ -114,13 +114,13 @@ Autodesk.Forge = Autodesk.Forge || {};
             _clientId = clientId;
             switch(options.env) {
                 case 'stg':
-                    _apiBaseUrl = Constants.API_HOST_STG;
+                    _apiBaseUrl = Constants.API_PROTOCOL + '://' + Constants.API_HOST_STG;
                     break;
                 case 'prod':
-                    _apiBaseUrl = Constants.API_HOST_PROD;
+                    _apiBaseUrl = Constants.API_PROTOCOL + '://' + Constants.API_HOST_PROD;
                     break;
                 default:
-                    _apiBaseUrl = Constants.API_HOST_DEV;
+                    _apiBaseUrl = Constants.API_PROTOCOL + '://' + Constants.API_HOST_DEV;
             }
             _redirectUri = options && options.redirectUri ? options.redirectUri : null;
             _2LeggedTokenUrl = options && options.twoLeggedTokenUrl ? options.twoLeggedTokenUrl : null;

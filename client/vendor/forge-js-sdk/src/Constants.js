@@ -29,9 +29,11 @@ Autodesk.Forge = Autodesk.Forge || {};
      */
     Autodesk.Forge.Constants = {
         //api endpoints
-        API_HOST_PROD: 'https://developer.api.autodesk.com',
-        API_HOST_STG: 'https://developer-stg.api.autodesk.com',
-        API_HOST_DEV: 'https://developer-dev.api.autodesk.com'
+        API_HOST_PROD: 'developer.api.autodesk.com',
+        API_HOST_STG: 'developer-stg.api.autodesk.com',
+        API_HOST_DEV: 'developer-dev.api.autodesk.com',
+        //api protocol
+        API_PROTOCOL: 'https'
     };
 
 }());
