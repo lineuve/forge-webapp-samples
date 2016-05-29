@@ -165,9 +165,9 @@
 
 
 	<div id="healing-buttons" class="hidden" style="margin: 0 auto;width: 68%;">
-		<div id="uploadAnother" class="btn spark_btn pull-left"><span>Repair Another File</span></div>
+		<div id="uploadAnother" class="btn spark_btn pull-left"><span><a href="upload.html">Repair Another File</a></span></div>
 
-		<div id="downloadMesh" class="btn spark_btn primary post-upload pull-right" disabled="disabled">
+		<div id="downloadMesh" class="btn spark_btn primary post-upload pull-right hidden" disabled="disabled">
 			<div class="spark_icon si-download"></div>
 			<span>Download</span></div>
 	</div>
@@ -200,8 +200,7 @@
 
 <script>
 
-	var bucketKey = 'mesh-healing-utility',
-			objectKey;
+	var bucketKey = 'mesh-healing-utility';
 
 	var problemsNamesArray = {
 		holes: "Holes",
@@ -387,14 +386,14 @@
 		Autodesk.Forge.MeshAPI.exportMesh(newMeshId, 'stl_ascii').then(function (payloadExport) {
 			console.log(payloadExport);
 
-			$('#downloadMesh').find('span').text('Download');
-			Autodesk.Forge.OSS.downloadFile(bucketKey, objectKey).then(function (downloadPayload) {
-				var a = document.createElement('a');
-				a.download = objectKey;
-				a.href = "data:application/octet-stream;base64," + btoa(downloadPayload);
-				a.click();
-
-			});
+//			$('#downloadMesh').find('span').text('Download');
+//			Autodesk.Forge.OSS.downloadFile(??).then(function (downloadPayload) {
+//				var a = document.createElement('a');
+//				a.download = 'download';
+//				a.href = "data:application/octet-stream;base64," + btoa(downloadPayload);
+//				a.click();
+//
+//			});
 		});
 	};
 
@@ -410,13 +409,8 @@
 			var urlParams = Autodesk.Forge.Helpers.extractParamsFromURL();
 			var meshId = urlParams.meshId || 0;
 			var isQuick = urlParams.isQuick == "true";
-			objectKey = urlParams.objectKey;
 
 			common.setUIFunctionality();
-
-			$('#uploadAnother').on("click", function () {
-				eventBroadCaster.broadcastEvent('repairIframe.uploadClick');
-			});
 
 			if (meshId) {
 				$('.spinner-with-text').show();

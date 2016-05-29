@@ -96,7 +96,10 @@
 <body>
 <div class="container">
 
-	<div class="spinner"></div>
+	<div class="spinner-with-text">
+		<div id="spinner-text"></div>
+		<div class="spinner"></div>
+	</div>
 
 	<div class="hidden" id="assets-files">
 		<table class="table">
@@ -127,6 +130,7 @@
 <script type="text/javascript" charset="utf-8" src="../../../vendor/forge-js-sdk/src/Helpers.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../../vendor/forge-js-sdk/src/Request.js"></script>
 <script type="text/javascript" charset="utf-8" src="../../../vendor/forge-js-sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../../vendor/forge-js-sdk/src/dm/Oss.js"></script>
 
 <!-- your config file and initialization -->
 <script type="text/javascript" charset="utf-8" src="../../../scripts/config.js"></script>
@@ -142,8 +146,7 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
-	//the asset id we are referring to
-	var currentAssetId;
+	var defaultBucketKey = 'mesh-healing-utility';
 
 	var predefinedAssets = [
 		{
@@ -194,8 +197,8 @@
 
 
 			$(tr).on('click', function (e) {
+				upload(item.name,isQuick);
 
-				window.location.href = '../upload.html?fileUrl=' + item.fileUrl + '&isQuick=' + isQuick;
 			});
 
 			$('#assetsTbody').append(tr);
@@ -203,47 +206,32 @@
 		$('.spinner').hide();
 
 		$('#assets-files').removeClass('hidden');
+	}
+
+	var errorResp = function (error) {
+		console.error(error);
+		$('#messageError').show();
+	};
+
+	function upload(fileName,isQuick) {
+		//nice UI
+		$('.spinner-with-text').show();
+		$('.spinner').show();
+		$('#spinner-text').text('Loading...');
+
+		$('#assets-files').hide();
 
 
-		/**
-		 ADSKSpark.Assets.getAsset(currentAssetId).then(function(asset){
-			console.info('asset response was:', asset);
-			$('.spinner').hide();
-			$('#assets-files').removeClass('hidden');
+		//get or create a bucket into which we upload the file
+		var createBucketObj = {bucketKey: defaultBucketKey, policyKey: 'temporary'};
+		Autodesk.Forge.OSS.getOrCreateBucket(defaultBucketKey, createBucketObj).then(function (bucketResponse) {
 
-			//for empty sources the id of the first source is 999
-			if (asset.file_formats.length > 0 && asset.file_formats[0].id !== 999) {
-				$('#files').removeClass('hidden');
-				$.each(asset.file_formats, function (index, item) {
-
-					var tr = $('<tr class="in-table"></tr>');
-					tr.append($('<td><i class="spark_icon si-asset-file-icon"></i>' + item.file_name + '</td>'));
-					tr.append($('<td>' + item.file_id + '</td>'));
-
-					var actionsElem = '<div class="dropdown actions">' +
-							'<i class="spark_icon si-actions-icon" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></i>' +
-							'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">' +
-							'<li role="presentation"><a role="menuitem" onclick="deleteSourceFromAsset(' + currentAssetId + ',' + item.file_id + ',$(this).parents(\'tr\'))"">DELETE</a></li>' +
-							'</ul></div>';
-
-
-					tr.append($('<td>' + actionsElem + '</td>'));
-
-					$(tr).on('click', function(e){
-
-						window.location.href = "../upload.html?fileUrl=" + item.file_id;
-					});
-
-					$('#assetsTbody').append(tr);
-				});
-			} else {
-				$('#empty-files').removeClass('hidden');
-				$('.upload-link').attr('href', $('.upload-link').attr('href') + '?assetId=' + currentAssetId);
-
-				//broadcast the state to the iframe - intended only for the storage UI
-				eventBroadCaster.broadcastEvent('emptyAssets');
-				});
-			}*/
+			//upload the selected file from the server
+			Autodesk.Forge.Request(AUTH_SERVER_URL + '/upload_file?fileName=' + fileName + '&bucketKey=' + defaultBucketKey,
+					null, {withCredentials: true}).put().then(function (result) {
+				window.location.href = '../upload.html?objectId=' + result.objectId + '&objectKey=' + result.objectKey + '&isQuick=' + isQuick;
+			}, errorResp);
+		}, errorResp);
 	}
 
 
