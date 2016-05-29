@@ -106,14 +106,14 @@ Autodesk.Forge = Autodesk.Forge || {};
          * @description - Download a user's file
          * @memberOf Autodesk.Forge.OSS
          * @param {String} bucketKey - The name of the bucket where the file resides
-         * @param {String} fileId - the file to download
+         * @param {String} objectName - the file to download
          * @returns {Promise} - A promise that will resolve to a JSON object with .download_url
          */
-        downloadFile: function (bucketKey, fileId) {
+        downloadFile: function (bucketKey, objectName) {
 
             //Make sure fileId is defined and that it is valid
             if (bucketKey && fileId) {
-                return Client.authorized3LeggedApiRequest(_apiEndpoint + '/buckets/' + bucketKey + '/objects/' + fileId,{notJsonResponse:true}).get();
+                return Client.authorized3LeggedApiRequest(_apiEndpoint + '/buckets/' + bucketKey + '/objects/' + objectName,{notJsonResponse:true}).get();
             }
 
             return Promise.reject(new Error('You need to supply bucketKey and objectName'));
