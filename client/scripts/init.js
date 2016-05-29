@@ -26,7 +26,20 @@ Autodesk.Forge = Autodesk.Forge || {};
 var CLIENT_ID = CLIENT_ID || '',
 	REDIRECT_URI = REDIRECT_URI || '',
 	ENV = ENV || 'dev',
+    API_BASE_URL,
     DEFAULT_BUCKET = 'mesh-healing-utility-' + CLIENT_ID.toLocaleLowerCase();
+
+
+switch(ENV) {
+    case 'stg':
+        API_BASE_URL = Autodesk.Forge.Constants.API_PROTOCOL + '://' + Autodesk.Forge.Constants.API_HOST_STG;
+        break;
+    case 'prod':
+        API_BASE_URL = Autodesk.Forge.Constants.API_PROTOCOL + '://' + Autodesk.Forge.Constants.API_HOST_PROD;
+        break;
+    default:
+        API_BASE_URL = Autodesk.Forge.Constants.API_PROTOCOL + '://' + Autodesk.Forge.Constants.API_HOST_DEV;
+}
 
 var options = {
 	env: ENV,

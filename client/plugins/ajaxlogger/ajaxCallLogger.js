@@ -14,7 +14,7 @@ var ajaxCallLogger = function(){
 	var loggerElementsHeight = 60;
 	var loggerId = "requestLog";
 	var loggerDeatilsId = loggerId+"-details";
-	var urlToHide = ".spark.autodesk.com/api/v1/";
+	var urlToHide;
 	/**
 	 *  Adjsut string length to desired length
 	 */
@@ -113,6 +113,9 @@ var ajaxCallLogger = function(){
 	};
 
 	return{
+		init: function(apiBaseUrl){
+			urlToHide = apiBaseUrl;
+		},
 		log: log,
 
 		/**
@@ -205,7 +208,7 @@ var ajaxCallLogger = function(){
 		 */
 		startRegularListener: function(){
 			ajaxCallListener(function(data){
-				ajaxCallLogger.log(data);
+				log(data);
 			});
 		}
 	};
