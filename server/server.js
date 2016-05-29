@@ -81,6 +81,8 @@ app.get('/access_token', function (req, res) {
             //return the access token object (json)
             var resp = JSON.parse(body);
 
+
+            req.session.access_token = JSON.parse(JSON.stringify(resp.access_token));
             if (resp.refresh_token) {
                 req.session.refresh_token = JSON.parse(JSON.stringify(resp.refresh_token));
             }
@@ -114,6 +116,8 @@ app.get('/get_credentials', function (req, res) {
     }, function (err, result, body) {
         //return the access token object (json)
         var resp = JSON.parse(body);
+        req.session.access_token = JSON.parse(JSON.stringify(resp.access_token));
+        
         res.send(resp);
     });
 });
@@ -146,6 +150,7 @@ app.get('/refresh_token', function (req, res) {
             //return the access token object (json)
             var resp = JSON.parse(body);
 
+            req.session.access_token = JSON.parse(JSON.stringify(resp.access_token));
             if (resp.refresh_token) {
                 req.session.refresh_token = JSON.parse(JSON.stringify(resp.refresh_token));
             }
@@ -158,6 +163,40 @@ app.get('/refresh_token', function (req, res) {
     }
 
 });
+
+/**
+ * This endpoint has nothing to do with authentication, but due to some OSS + Client JS limitations
+ * we need a way to upload a file from the local environment in order to use it later on
+ */
+
+var fs = require('fs');
+
+app.put('/upload_file', function (req, res){
+    console.log('session is:', req.session);
+    var fileName = req.query.fileName,
+        bucketKey = req.query.bucketKey;
+
+    var uploadUrl = API_SERVER + '/oss/v2/buckets/' + bucketKey + '/objects/' + fileName;
+
+    fs.readFile('files/' + fileName, function (err, data) {
+        request({
+                uri: uploadUrl,
+                headers: {
+                    'Authorization': 'Bearer ' + req.session.access_token,
+                    'Content-Type': 'application/octet-stream'
+                },
+                body: data,
+                method: 'PUT'
+            },
+            function (error, response, body) {
+                res.send(body);
+            });
+    });
+
+
+});
+
+
 
 app.listen(port);
 
