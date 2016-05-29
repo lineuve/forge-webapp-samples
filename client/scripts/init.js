@@ -26,17 +26,14 @@ Autodesk.Forge = Autodesk.Forge || {};
 var CLIENT_ID = CLIENT_ID || '',
 	REDIRECT_URI = REDIRECT_URI || '',
 	ENV = ENV || 'dev',
-    SERVER_2_LEGGED_ENDPOINT = AUTH_SERVER_URL ? AUTH_SERVER_URL + '/get_credentials' : null,
-    SERVER_3_LEGGED_ENDPOINT = AUTH_SERVER_URL ? AUTH_SERVER_URL + '/access_token' : null,
-    SERVER_REFRESH_TOKEN_ENDPOINT = AUTH_SERVER_URL ? AUTH_SERVER_URL + '/refresh_token' : null;
     DEFAULT_BUCKET = 'mesh-healing-utility-' + CLIENT_ID.toLocaleLowerCase();
 
 var options = {
 	env: ENV,
 	redirectUri: REDIRECT_URI,
-    twoLeggedTokenUrl: SERVER_2_LEGGED_ENDPOINT,
-    threeLeggedTokenUrl: SERVER_3_LEGGED_ENDPOINT,
-    refreshTokenUrl: SERVER_REFRESH_TOKEN_ENDPOINT,
+    twoLeggedTokenUrl: AUTH_SERVER_URL ? AUTH_SERVER_URL + '/get_credentials' : null,
+    threeLeggedTokenUrl: AUTH_SERVER_URL ? AUTH_SERVER_URL + '/access_token' : null,
+    refreshTokenUrl: AUTH_SERVER_URL ? AUTH_SERVER_URL + '/refresh_token' : null,
     scope: ['data:read', 'data:create', 'data:write', 'bucket:read', 'bucket:create']
 };
 
