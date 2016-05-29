@@ -112,7 +112,7 @@ Autodesk.Forge = Autodesk.Forge || {};
          */
         initialize: function (clientId, options) {
             _clientId = clientId;
-            switch (options.env){
+            switch(options.env) {
                 case 'stg':
                     _apiBaseUrl = Constants.API_HOST_STG;
                     break;
@@ -126,7 +126,7 @@ Autodesk.Forge = Autodesk.Forge || {};
             _2LeggedTokenUrl = options && options.twoLeggedTokenUrl ? options.twoLeggedTokenUrl : null;
             _3LeggedTokenUrl = options && options.threeLeggedTokenUrl ? options.threeLeggedTokenUrl : null;
             _refreshTokenUrl = options && options.refreshTokenUrl ? options.refreshTokenUrl : null;
-            if (options && options.scope && Array.isArray(options.scope) && options.scope.length > 0){
+            if (options && options.scope && Array.isArray(options.scope) && options.scope.length > 0) {
                 _scope = options.scope.join('%20');
             }
 
@@ -146,7 +146,7 @@ Autodesk.Forge = Autodesk.Forge || {};
                 '&client_id=' + _clientId +
                 '&redirect_uri=' + redirectUri;
 
-            if (_scope){
+            if (_scope) {
                 redirectionUrl += '&scope=' + _scope;
             }
 
@@ -166,7 +166,7 @@ Autodesk.Forge = Autodesk.Forge || {};
          * @memberOf Autodesk.Forge.Client
          * @returns {Boolean} - True if the access token exists. Otherwise, false.
          */
-        isTokenExist: function(){
+        isTokenExist: function () {
             return !!JSON.parse(localStorage.getItem(ACCESS_TOKEN_KEY));
         },
         /**
@@ -271,9 +271,9 @@ Autodesk.Forge = Autodesk.Forge || {};
                         if (_refreshTokenUrl && token.expires_at && now > token.expires_at) {
                             _this.refreshAccessToken()
                                 .then(function (refreshedToken) {
-                                    if (refreshedToken.error){
+                                    if (refreshedToken.error) {
                                         reject(new Error('Refresh token failed, please login again'));
-                                    }else {
+                                    } else {
                                         resolve(formatAuthHeader(refreshedToken));
                                     }
 
