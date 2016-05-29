@@ -29,6 +29,7 @@ var CLIENT_ID = CLIENT_ID || '',
     SERVER_2_LEGGED_ENDPOINT = AUTH_SERVER_URL ? AUTH_SERVER_URL + '/get_credentials' : null,
     SERVER_3_LEGGED_ENDPOINT = AUTH_SERVER_URL ? AUTH_SERVER_URL + '/access_token' : null,
     SERVER_REFRESH_TOKEN_ENDPOINT = AUTH_SERVER_URL ? AUTH_SERVER_URL + '/refresh_token' : null;
+    DEFAULT_BUCKET = 'mesh-healing-utility-' + CLIENT_ID.toLocaleLowerCase();
 
 var options = {
 	env: ENV,

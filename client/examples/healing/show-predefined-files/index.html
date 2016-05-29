@@ -146,7 +146,6 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
-	var defaultBucketKey = 'mesh-healing-utility';
 
 	var predefinedAssets = [
 		{
@@ -223,11 +222,11 @@
 
 
 		//get or create a bucket into which we upload the file
-		var createBucketObj = {bucketKey: defaultBucketKey, policyKey: 'temporary'};
-		Autodesk.Forge.OSS.getOrCreateBucket(defaultBucketKey, createBucketObj).then(function (bucketResponse) {
+		var createBucketObj = {bucketKey: DEFAULT_BUCKET, policyKey: 'temporary'};
+		Autodesk.Forge.OSS.getOrCreateBucket(DEFAULT_BUCKET, createBucketObj).then(function (bucketResponse) {
 
 			//upload the selected file from the server
-			Autodesk.Forge.Request(AUTH_SERVER_URL + '/upload_file?fileName=' + fileName + '&bucketKey=' + defaultBucketKey,
+			Autodesk.Forge.Request(AUTH_SERVER_URL + '/upload_file?fileName=' + fileName + '&bucketKey=' + DEFAULT_BUCKET,
 					null, {withCredentials: true}).put().then(function (result) {
 				window.location.href = '../upload.html?objectId=' + result.objectId + '&objectKey=' + result.objectKey + '&isQuick=' + isQuick;
 			}, errorResp);
