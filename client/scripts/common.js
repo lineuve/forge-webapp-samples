@@ -188,8 +188,9 @@ var common = function ($) {
                 callback(DEFAULT_BUCKET_PREFIX + memberId.toLocaleLowerCase());
             } else {
                 Autodesk.Forge.Client.getMyProfile().then(function (response) {
-                    localStorage.setItem('forgeMemberId', response.userId);
-                    callback(DEFAULT_BUCKET_PREFIX + memberId.toLocaleLowerCase());
+                    memberId = response.userId.toLocaleLowerCase();
+                    localStorage.setItem('forgeMemberId', memberId);
+                    callback(DEFAULT_BUCKET_PREFIX + memberId);
                 });
             }
         }
