@@ -310,6 +310,15 @@ Autodesk.Forge = Autodesk.Forge || {};
         },
 
         /**
+         * @description - Get user's profile
+         * @memberOf Autodesk.Forge.Client
+         * @returns {Promise} - A promise that will resolve to user's personal profile
+         */
+        getMyProfile: function(){
+            return this.authorized3LeggedApiRequest('/userprofile/v1/users/@me').get();
+        },
+
+        /**
          * @description - Open an auth window
          * @memberOf Autodesk.Forge.Client
          */
