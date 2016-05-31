@@ -146,6 +146,11 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
+	var defaultBucket;
+	common.getDefaultBucket(function(bucket){
+		defaultBucket = bucket;
+	});
+
 
 	var predefinedAssets = [
 		{
@@ -222,11 +227,11 @@
 
 
 		//get or create a bucket into which we upload the file
-		var createBucketObj = {bucketKey: DEFAULT_BUCKET, policyKey: 'temporary'};
-		Autodesk.Forge.OSS.getOrCreateBucket(DEFAULT_BUCKET, createBucketObj).then(function (bucketResponse) {
+		var createBucketObj = {bucketKey: defaultBucket, policyKey: 'temporary'};
+		Autodesk.Forge.OSS.getOrCreateBucket(defaultBucket, createBucketObj).then(function (bucketResponse) {
 
 			//upload the selected file from the server
-			Autodesk.Forge.Request(AUTH_SERVER_URL + '/upload_file?fileName=' + fileName + '&bucketKey=' + DEFAULT_BUCKET,
+			Autodesk.Forge.Request(AUTH_SERVER_URL + '/upload_file?fileName=' + fileName + '&bucketKey=' + defaultBucket,
 					null, {withCredentials: true}).put().then(function (result) {
 				window.location.href = '../upload.html?objectId=' + result.objectId + '&objectKey=' + result.objectKey + '&isQuick=' + isQuick;
 			}, errorResp);

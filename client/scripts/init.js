@@ -27,7 +27,7 @@ var CLIENT_ID = CLIENT_ID || '',
 	REDIRECT_URI = REDIRECT_URI || '',
 	ENV = ENV || 'dev',
     API_BASE_URL,
-    DEFAULT_BUCKET = 'mesh-healing-utility-' + CLIENT_ID.toLocaleLowerCase();
+    DEFAULT_BUCKET_PREFIX = 'mesh-healing-utility-';
 
 
 switch(ENV) {

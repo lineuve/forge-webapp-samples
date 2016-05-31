@@ -245,6 +245,11 @@
 
 	var allowedFileUploadSize = 1000 * 1000 * 100; //100MB
 
+	var defaultBucket;
+	common.getDefaultBucket(function(bucket){
+		defaultBucket = bucket;
+	});
+
 
 	var errorResp = function (error) {
 		console.log(error);
@@ -271,7 +276,7 @@
 
 
 	function importMesh(fileId, name, isQuick) {
-		Autodesk.Forge.MeshAPI.importMesh(fileId, name, null, undefined).then(
+		Autodesk.Forge.MeshAPI.importMesh(fileId, name, null, null).then(
 				function (mesh) {
 					if (mesh.id) {
 						window.location.href = 'repair.html?meshId=' + mesh.id + '&isQuick=' + isQuick;
@@ -303,8 +308,8 @@
 		console.log(fileData);
 
 		//get or create a bucket into which we upload the file
-		var createBucketObj = {bucketKey: DEFAULT_BUCKET, policyKey: 'temporary'};
-		Autodesk.Forge.OSS.getOrCreateBucket(DEFAULT_BUCKET, createBucketObj).then(function (bucketResponse) {
+		var createBucketObj = {bucketKey: defaultBucket, policyKey: 'temporary'};
+		Autodesk.Forge.OSS.getOrCreateBucket(defaultBucket, createBucketObj).then(function (bucketResponse) {
 			console.log(bucketResponse);
 			Autodesk.Forge.OSS.uploadFile(bucketResponse.bucketKey, fileData).then(function (fileResponse) {
 				uploadCallback(fileResponse);

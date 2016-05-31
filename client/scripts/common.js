@@ -164,7 +164,7 @@ var common = function ($) {
             }
         },
 
-        isChrome: function(){
+        isChrome: function () {
             var isChromium = window.chrome,
                 winNav = window.navigator,
                 vendorName = winNav.vendor,
@@ -172,12 +172,25 @@ var common = function ($) {
                 isIEedge = winNav.userAgent.indexOf("Edge") > -1,
                 isIOSChrome = winNav.userAgent.match("CriOS");
 
-            if(isIOSChrome){
+            if (isIOSChrome) {
                 return true;
-            } else if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isOpera == false && isIEedge == false) {
+            } else if (isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isOpera == false && isIEedge == false) {
                 return true;
             } else {
                 return false;
+            }
+        },
+
+        getDefaultBucket: function (callback) {
+            var memberId = localStorage.getItem('forgeMemberId');
+
+            if (memberId) {
+                callback(DEFAULT_BUCKET_PREFIX + memberId.toLocaleLowerCase());
+            } else {
+                Autodesk.Forge.Client.getMyProfile().then(function (response) {
+                    localStorage.setItem('forgeMemberId', response.userId);
+                    callback(DEFAULT_BUCKET_PREFIX + memberId.toLocaleLowerCase());
+                });
             }
         }
 
