@@ -112,7 +112,7 @@ Autodesk.Forge = Autodesk.Forge || {};
         downloadFile: function (bucketKey, objectName) {
 
             //Make sure fileId is defined and that it is valid
-            if (bucketKey && fileId) {
+            if (bucketKey && objectName) {
                 return Client.authorized3LeggedApiRequest(_apiEndpoint + '/buckets/' + bucketKey + '/objects/' + objectName,{notJsonResponse:true}).get();
             }
 
