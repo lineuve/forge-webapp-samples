@@ -44,7 +44,7 @@ Autodesk.Forge = Autodesk.Forge || {};
 
             if (bucketParams.bucketKey) {
                 var headers = {'Content-Type': 'application/json'};
-                return Client.authorized3LeggedApiRequest(_apiEndpoint + '/buckets').post(headers, JSON.stringify(bucketParams));
+                return Client.authorizedAs2LeggedApiRequest(_apiEndpoint + '/buckets').post(headers, JSON.stringify(bucketParams));
             }
 
             return Promise.reject(new Error('You need to supply bucketKey'));
@@ -60,7 +60,7 @@ Autodesk.Forge = Autodesk.Forge || {};
 
             //Make sure fileId is defined and that it is valid
             if (bucketKey) {
-                return Client.authorized3LeggedApiRequest(_apiEndpoint + '/buckets/' + bucketKey + '/details').get();
+                return Client.authorizedAs2LeggedApiRequest(_apiEndpoint + '/buckets/' + bucketKey + '/details').get();
             }
 
             return Promise.reject(new Error('You need to supply bucketKey'));
@@ -96,7 +96,7 @@ Autodesk.Forge = Autodesk.Forge || {};
         uploadFile: function (bucketKey, fileData) {
 
             if (bucketKey && fileData.requestBody && fileData.fileName) {
-                return Client.authorized3LeggedApiRequest(_apiEndpoint + '/buckets/' + bucketKey + '/objects/' + fileData.fileName).put(null, fileData.requestBody);
+                return Client.authorizedAs2LeggedApiRequest(_apiEndpoint + '/buckets/' + bucketKey + '/objects/' + fileData.fileName).put(null, fileData.requestBody);
             }
 
             return Promise.reject(new Error('You need to supply bucketKey, requestBody and fileName'));
@@ -113,7 +113,7 @@ Autodesk.Forge = Autodesk.Forge || {};
 
             //Make sure fileId is defined and that it is valid
             if (bucketKey && objectName) {
-                return Client.authorized3LeggedApiRequest(_apiEndpoint + '/buckets/' + bucketKey + '/objects/' + objectName,{notJsonResponse:true}).get();
+                return Client.authorizedAs2LeggedApiRequest(_apiEndpoint + '/buckets/' + bucketKey + '/objects/' + objectName,{notJsonResponse:true}).get();
             }
 
             return Promise.reject(new Error('You need to supply bucketKey and objectName'));
