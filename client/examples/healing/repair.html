@@ -393,6 +393,7 @@
 			//download the selected file from the server
 			Autodesk.Forge.Request(AUTH_SERVER_URL + '/download_file?fileName=' + fileName + '&bucketKey=' + bucketName,
 					null, {withCredentials: true}).get().then(function (result) {
+				$('#downloadMesh').remove();
 				window.location.href = result.downloadUrl;
 			}, errorResp);
 
@@ -423,7 +424,6 @@
 				Autodesk.Forge.MeshAPI.analyzeMesh(meshId).then(function (payloadAnalyze) {
 					$("#spinner-text").text("Repairing...");
 
-					console.log(payloadAnalyze);
 					eventBroadCaster.broadcastEvent('repairIframe.repair');
 
 					var analyzedProblems = payloadAnalyze.problems;
