@@ -29,7 +29,7 @@ var express = require('express'),
     bodyParser = require('body-parser');
 
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({
         cookie: {maxAge: 720000000},
         resave: false,
@@ -223,14 +223,14 @@ app.get('/download_file', function (req, res) {
         function (error, response, body) {
 
             //response.on('end', function (chunk) {
-                fs.writeFile('../client/downloads/' + fileName, body, function (err) {
-                    var successObj = {downloadUrl: 'downloads/' + req.query.fileName};
-                    if (!err) {
-                        res.send(JSON.stringify(successObj));
-                    } else {
-                        res.send(JSON.stringify({error: 'Error in returning file'}));
-                    }
-                });
+            fs.writeFile('../client/downloads/' + fileName, body, function (err) {
+                var successObj = {downloadUrl: '/downloads/' + req.query.fileName};
+                if (!err) {
+                    res.send(JSON.stringify(successObj));
+                } else {
+                    res.send(JSON.stringify({error: 'Error in returning file'}));
+                }
+            });
             //});
         });
 
