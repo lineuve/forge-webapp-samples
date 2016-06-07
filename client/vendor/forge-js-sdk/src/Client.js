@@ -28,7 +28,8 @@ Autodesk.Forge = Autodesk.Forge || {};
         Helpers = Autodesk.Forge.Helpers,
         Request = Autodesk.Forge.Request;
 
-    var ACCESS_TOKEN_KEY = 'forge-access-token';
+    var ACCESS_TOKEN_KEY = 'forge-user-token',
+        APP_TOKEN_KEY = 'forge-app-token';
 
     var _clientId = '',
         _apiBaseUrl = '',
@@ -45,10 +46,10 @@ Autodesk.Forge = Autodesk.Forge || {};
      */
     var get2LeggedToken = function () {
         if (_2LeggedTokenUrl) {
-            return Request(_2LeggedTokenUrl).get().then(function (data) {
+            return Request(_2LeggedTokenUrl + '?scope=' + _scope,null, {withCredentials: true}).get().then(function (data) {
                 var now = Date.now();
                 data.expires_at = now + parseInt(data.expires_in) * 1000;
-                localStorage.setItem(ACCESS_TOKEN_KEY, JSON.stringify(data));
+                localStorage.setItem(APP_TOKEN_KEY, JSON.stringify(data));
                 return data.access_token;
             });
         }
@@ -208,13 +209,8 @@ Autodesk.Forge = Autodesk.Forge || {};
          * @returns {Promise} - A promise that resolves to the guest token.
          */
         get2LeggedToken: function () {
-            var token = JSON.parse(localStorage.getItem(GUEST_TOKEN_KEY));
+            var token = JSON.parse(localStorage.getItem(APP_TOKEN_KEY));
             var now = Date.now();
-
-            //if guest token is not implemented try to use access token
-            if (!token) {
-                token = JSON.parse(localStorage.getItem(ACCESS_TOKEN_KEY));
-            }
 
             if (token && token.expires_at && token.expires_at > now) {
                 return Promise.resolve(token.access_token);
