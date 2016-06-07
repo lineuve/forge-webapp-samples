@@ -197,6 +197,37 @@ app.put('/upload_file', function (req, res){
 });
 
 
+app.get('/download_file', function (req, res) {
+    console.log('session is:', req.session);
+    var fileName = req.query.fileName,
+        bucketKey = req.query.bucketKey;
+
+    var downloadUrl = API_SERVER + '/oss/v2/buckets/' + bucketKey + '/objects/' + fileName;
+
+    request({
+            uri: downloadUrl,
+            headers: {
+                'Authorization': 'Bearer ' + req.session.access_token
+            },
+            method: 'GET'
+        },
+        function (error, response, body) {
+
+            //response.on('end', function (chunk) {
+                fs.writeFile('../client/downloads/' + fileName, body, function (err) {
+                    var successObj = {downloadUrl: 'downloads/' + req.query.fileName};
+                    if (!err) {
+                        res.send(JSON.stringify(successObj));
+                    } else {
+                        res.send(JSON.stringify({error: 'Error in returning file'}));
+                    }
+                });
+            //});
+        });
+
+
+});
+
 
 app.listen(port);
 
