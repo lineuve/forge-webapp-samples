@@ -27,7 +27,7 @@ var CLIENT_ID = CLIENT_ID || '',
 	REDIRECT_URI = REDIRECT_URI || '',
 	ENV = ENV || 'dev',
     API_BASE_URL,
-    DEFAULT_BUCKET_PREFIX = 'mhu-' + CLIENT_ID.toLowerCase() + '-';
+    DEFAULT_BUCKET_PREFIX = 'mhu_' + CLIENT_ID.toLowerCase() + '_';
 
 
 switch(ENV) {
