@@ -25,9 +25,11 @@ var express = require('express'),
     app = express(),
     request = require('request'),
     session = require('express-session'),
-    cookieParser = require('cookie-parser');
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser');
 
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended : true}));
 app.use(session({
         cookie: {maxAge: 720000000},
         resave: false,
@@ -99,10 +101,13 @@ app.get('/access_token', function (req, res) {
 
 // 2-legged token service
 app.get('/get_credentials', function (req, res) {
+    var scope = encodeURIComponent(req.query.scope);
+
     var url = API_SERVER + '/authentication/v1/authenticate',
         params = 'grant_type=client_credentials' +
             '&client_id=' + config.CLIENT_ID +
-            '&client_secret=' + config.CLIENT_SECRET;
+            '&client_secret=' + config.CLIENT_SECRET +
+            '&scope=' + scope;
 
     var headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -116,19 +121,20 @@ app.get('/get_credentials', function (req, res) {
     }, function (err, result, body) {
         //return the access token object (json)
         var resp = JSON.parse(body);
-        req.session.access_token = JSON.parse(JSON.stringify(resp.access_token));
-        
+        req.session.app_token = JSON.parse(JSON.stringify(resp.access_token));
+
+        console.log(req.session);
         res.send(resp);
     });
 });
 
 // Refresh token service
 app.get('/refresh_token', function (req, res) {
-    console.log('session is:', req.session);
+
     res.setHeader('Content-Type', 'application/json');
-    var refresh_token = req.session.refresh_token ;
+    var refresh_token = req.session.refresh_token;
     if (!refresh_token) {
-        res.send(JSON.stringify({error:'refresh_token wasn\'t provided'}));
+        res.send(JSON.stringify({error: 'refresh_token wasn\'t provided'}));
     }
     else {
         var url = API_SERVER + '/authentication/v1/refreshtoken',
@@ -171,7 +177,7 @@ app.get('/refresh_token', function (req, res) {
 
 var fs = require('fs');
 
-app.put('/upload_file', function (req, res){
+app.put('/upload_file', function (req, res) {
     console.log('session is:', req.session);
     var fileName = req.query.fileName,
         bucketKey = req.query.bucketKey;
@@ -182,7 +188,7 @@ app.put('/upload_file', function (req, res){
         request({
                 uri: uploadUrl,
                 headers: {
-                    'Authorization': 'Bearer ' + req.session.access_token,
+                    'Authorization': 'Bearer ' + req.session.app_token,
                     'Content-Type': 'application/octet-stream'
                 },
                 body: data,
@@ -197,8 +203,11 @@ app.put('/upload_file', function (req, res){
 });
 
 
+/**
+ * Download file endpoint
+ */
 app.get('/download_file', function (req, res) {
-    console.log('session is:', req.session);
+
     var fileName = req.query.fileName,
         bucketKey = req.query.bucketKey;
 
