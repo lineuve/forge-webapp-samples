@@ -19,12 +19,10 @@ Copy the file `client/scripts/config.example.js` to `client/scripts/config.js` a
 This repository is provided with a login callback html file that makes this task easy. 
 The file is located in `plugins/login/login-callback.html` and you should set your REDIRECT_URI to `http://example.com/your-app/client/plugins/login/login-callback.html` (assumed the home page of your app is `http://example.com/your-app/client`)
 * **ENV** - The environment of the API - `dev` / `stg` / `prd`. Default is `dev`.
-* **SERVER_3_LEGGED_ENDPOINT** - The endpoint of the callback for the 3-legged authorization flow, returns the access_token. For more details see next section.
-* **SERVER_REFRESH_TOKEN_ENDPOINT** - The refresh token endpoint for the 3-legged authorization flow, returns the access_token. For more details see next section.
+* **AUTH_SERVER_URL** - The server path that implements the endpoints for the authorization flow. For more details see next section.
 
 #### Authentication server setup
 This repo ships with a nodejs authorization server. For more details see the `authentication_server/README.MD`
-
 
 ### The contents of this repository
 This repository demonstrates the use of Forge APIs in a 3D Model Healing Utility For Printing (healing-utility.html) - 
