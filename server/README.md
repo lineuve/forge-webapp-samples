@@ -1,6 +1,6 @@
 Spark NodeJS server
 ===================
-This server implements required [Spark OAuth2.0](https://spark.autodesk.com/developers/reference/authentication) endpoints:
+This server implements required [Forge OAuth2.0](https://developer-stg.autodesk.com/en/docs/oauth/v2) endpoints:
 
 * `/access_token` - The callback endpoint for the above authorization flow, returns the access_token for the 3-legged flow
 * `/get_credentials` - Returns the access_token for the 2-legged flow
@@ -18,4 +18,4 @@ $ npm install
 $ node server.js
 ```
 
-You now have a server running on your machine with the access_token, get_credentials and refresh_token endpoints.
+You now have a server running on your machine with the `access_token`, `get_credentials` and `refresh_token` endpoints.
