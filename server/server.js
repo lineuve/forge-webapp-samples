@@ -188,7 +188,7 @@ app.put('/upload_file', function (req, res) {
         request({
                 uri: uploadUrl,
                 headers: {
-                    'Authorization': 'Bearer ' + req.session.app_token,
+                    'Authorization': 'Bearer ' + req.session.access_token,
                     'Content-Type': 'application/octet-stream'
                 },
                 body: data,
