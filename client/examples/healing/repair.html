@@ -394,7 +394,13 @@
 			Autodesk.Forge.Request(AUTH_SERVER_URL + '/download_file?fileName=' + fileName + '&bucketKey=' + bucketKey,
 					null, {withCredentials: true}).get().then(function (result) {
 				$('#downloadMesh').remove();
-				window.location.href = result.downloadUrl;
+
+				if (window.opener) {
+					window.location.href = result.downloadUrl;
+				} else {
+					window.parent.location.href = result.downloadUrl;
+				}
+
 			}, errorResp);
 
 		});
