@@ -179,20 +179,6 @@ var common = function ($) {
             } else {
                 return false;
             }
-        },
-
-        getDefaultBucket: function (callback) {
-            var memberId = localStorage.getItem('forgeMemberId');
-
-            if (memberId) {
-                callback(DEFAULT_BUCKET_PREFIX + memberId.toLocaleLowerCase());
-            } else {
-                Autodesk.Forge.Client.getMyProfile().then(function (response) {
-                    memberId = response.userId.toLocaleLowerCase();
-                    localStorage.setItem('forgeMemberId', memberId);
-                    callback(DEFAULT_BUCKET_PREFIX + memberId);
-                });
-            }
         }
 
     };

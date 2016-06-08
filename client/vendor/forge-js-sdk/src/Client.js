@@ -293,7 +293,7 @@ Autodesk.Forge = Autodesk.Forge || {};
          * @param {Object} [options] - Additional options that are supported by Request
          * @returns {Object} - The request object that abstracts REST APIs
          */
-        authorizedAs2LeggedApiRequest: function (endpoint, options) {
+        authorized2LeggedApiRequest: function (endpoint, options) {
             var _this = this;
             options = options || {};
             return Request(_apiBaseUrl + endpoint, function () {

@@ -36,7 +36,7 @@ Autodesk.Forge = Autodesk.Forge || {};
             'file_id': fileId,
             'name': name
         });
-        return Client.authorizedAs2LeggedApiRequest(_apiEndpoint + '/geom/meshes/import').post(headers, payload);
+        return Client.authorized3LeggedApiRequest(_apiEndpoint + '/geom/meshes/import').post(headers, payload);
     };
 
     /**

@@ -27,7 +27,7 @@ var CLIENT_ID = CLIENT_ID || '',
 	REDIRECT_URI = REDIRECT_URI || '',
 	ENV = ENV || 'dev',
     API_BASE_URL,
-    DEFAULT_BUCKET_PREFIX = 'mhu-' + CLIENT_ID.toLowerCase() + '-';
+    DEFAULT_BUCKET = 'forge_healing_utility_' + CLIENT_ID.toLowerCase();
 
 
 switch(ENV) {
@@ -47,7 +47,7 @@ var options = {
     twoLeggedTokenUrl: AUTH_SERVER_URL ? AUTH_SERVER_URL + '/get_credentials' : null,
     threeLeggedTokenUrl: AUTH_SERVER_URL ? AUTH_SERVER_URL + '/access_token' : null,
     refreshTokenUrl: AUTH_SERVER_URL ? AUTH_SERVER_URL + '/refresh_token' : null,
-    scope: ['data:read', 'data:create', 'data:write', 'bucket:read', 'bucket:create']
+    scope: ['data:read', 'data:write', 'bucket:read', 'bucket:create']
 };
 
 Autodesk.Forge.Client.initialize(CLIENT_ID, options);

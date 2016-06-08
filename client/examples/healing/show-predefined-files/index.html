@@ -150,10 +150,7 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
-	var defaultBucket;
-	common.getDefaultBucket(function(bucket){
-		defaultBucket = bucket;
-	});
+	var defaultBucket = DEFAULT_BUCKET;
 
 
 	var predefinedAssets = [
