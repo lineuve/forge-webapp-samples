@@ -216,6 +216,7 @@
 	var errorResp = function (error) {
 		console.error(error);
 		$('#messageError').show();
+		$('.spinner-with-text').hide();
 	};
 
 	function upload(fileName,isQuick) {
@@ -231,11 +232,8 @@
 		var createBucketObj = {bucketKey: defaultBucket, policyKey: 'temporary'};
 		Autodesk.Forge.OSS.getOrCreateBucket(defaultBucket, createBucketObj).then(function (bucketResponse) {
 
-			//get the extension of the file
-			var fileParts = fileName.split('.');
-
 			//upload the selected file from the server
-			Autodesk.Forge.Request(AUTH_SERVER_URL + '/upload_file?fileName=' + new Date().getTime() + '.' + fileParts.pop() + '&bucketKey=' + defaultBucket,
+			Autodesk.Forge.Request(AUTH_SERVER_URL + '/upload_file?fileName=' + fileName + '&bucketKey=' + defaultBucket,
 					null, {withCredentials: true}).put().then(function (result) {
 				window.location.href = '../upload.html?objectId=' + result.objectId + '&objectKey=' + result.objectKey + '&isQuick=' + isQuick;
 			}, errorResp);

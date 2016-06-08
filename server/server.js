@@ -179,17 +179,20 @@ var fs = require('fs');
 
 app.put('/upload_file', function (req, res) {
     console.log('session is:', req.session);
-    var fileName = req.query.fileName,
+    var origFileName = req.query.fileName,
         bucketKey = req.query.bucketKey;
 
+    //get the extension of the file
+    var fileParts = origFileName.split('.');
+    var fileName = new Date().getTime() + '.' + fileParts.pop();
     var uploadUrl = API_SERVER + '/oss/v2/buckets/' + bucketKey + '/objects/' + fileName;
 
-    fs.readFile('files/' + fileName, function (err, data) {
+    fs.readFile('files/' + origFileName, function (err, data) {
+
         request({
                 uri: uploadUrl,
                 headers: {
-                    'Authorization': 'Bearer ' + req.session.access_token,
-                    'Content-Type': 'application/octet-stream'
+                    'Authorization': 'Bearer ' + req.session.access_token
                 },
                 body: data,
                 method: 'PUT'
