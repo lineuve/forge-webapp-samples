@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Forge Sample Application</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles -->
+	<!--<link href="../../assets/css/styleOld.css" rel="stylesheet">-->
+	<link href="../../assets/css/common.css" rel="stylesheet">
+
+
+	<style>
+
+
+		.token_simulator_container .spinner{
+			position: relative;
+
+		}
+
+		.printer_type_container{
+			border-right: 1px #EBEBEB solid;
+			padding-right: 18px;
+			margin-right: 18px;
+		}
+
+		#inputPrinterType{
+			min-width: 320px;
+			height: 44px;
+		}
+
+		.form-control-tip
+		{
+			font-size: 12px;
+		    color:silver;
+			margin-top: 5px;
+		}
+
+		.main-container{
+
+			height: 462px;
+		}
+
+		.tab-content{
+			margin-top: 20px;
+		}
+
+		.form_field
+		{
+			margin-bottom: 25px;
+		}
+
+		.form-footer
+		{
+			border-top: 1px solid #e5e5e5;
+			margin: 76px 0;
+			padding: 18px 0;
+		}
+
+		.modal-dialog{
+			width: 300px;
+			text-align: center;
+			margin-left: 200px;
+			margin-top: 150px;
+		}
+
+		.modal-footer
+		{
+			text-align:center !important;
+		}
+
+		.modal-header {
+			position: relative;
+			padding: 8px 20px;
+		}
+
+   </style>
+</head>
+
+<body>
+
+	<div class="container main-container">
+
+		<div class="tab-content">
+			<div class="tab-pane fade active in" id="register">
+				<form id="register-printer-form" class="sample-app-form" novalidate="">
+					<div class="sample-title">Register Printer</div>
+					<hr>
+					<label for="inputPrinterType">
+						Printer type <span class="field-label">&nbsp;/&nbsp;type</span><i class="required"></i>
+						<i class="spark_icon si-help with_hover"></i>
+						<i class="stooltip"><span style="display: none;">Select the type of your attached 3D printer or 'Printer Simulator' if you have no 3D printer.</span></i>
+					</label>
+					<section class="form_field">
+						<div class="pull-left printer_type_container">
+							<select id="inputPrinterType" class="form-control" required="required">
+								<option value="">Please select...</option>
+							    <option value="-1">Printer Simulator</option>
+							</select>
+							<div class="field_error hidden">
+								<span>Required</span>
+							</div>
+						</div>
+						<div class="pull-left">Use our Printer Simulator for a quick<br>demonstration.</div>
+						<div class="clearfix"></div>
+					</section>
+					<section class="form_field">
+						<label for="inputName">
+							Printer name <span class="field-label">&nbsp;/&nbsp;printer_name</span><i class="required"></i>
+							<i class="spark_icon si-help with_hover"></i>
+							<i class="stooltip"><span style="display: none;">Enter a name for your printer.</span></i>
+						</label>
+						<input type="text" class="form-control" id="inputName" required>
+						<div class="field_error hidden">
+							<span>Required</span>
+						</div>
+					</section>
+					<section class="form_field">
+						<label for="inputToken">
+							Registration code <span class="field-label">&nbsp;/&nbsp;registration_code</span><i class="required"></i>
+							<i class="spark_icon si-help with_hover"></i>
+							<i class="stooltip"><span style="display: none;">Enter the six letter code displayed in the LCD display of your printer or the printer simulator's display below.</span></i>
+						</label>
+						<input type="text" class="form-control" id="inputToken" required>
+						<div class="field_error hidden">
+							<span>Required</span>
+						</div>
+						<div class="form-control-tip">Find your printer's registration code in the Settings tab of your printer's LCD screen.</div>
+					</section>
+
+					<div class="form-footer">
+						<div class="submit-wrapper">
+							<a onclick="eventBroadCaster.broadcastEvent('registerIframe.cancel')">Cancel</a>
+							<input class="spark_btn primary" type="submit" value="Register" id="submit">
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<!-- /container -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4>ERROR</h4>
+				</div>
+				<div class="modal-body">
+
+				</div>
+				<div class="modal-footer">
+					<a class="spark_btn small cancel" type="button">Close</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+	<!-- forge sdk -->
+	<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/Constants.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/Helpers.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/Request.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/Client.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/Paginated.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/print/PrintDB.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/print/Printer.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../scripts/config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../scripts/init.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../scripts/common.js"></script>
+
+	<!-- Enable broadcasting events and logging requests to top window -->
+	<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+
+	<script>
+	jQuery(function ($) {
+		ajaxCallListenerFromIframe();
+
+		Autodesk.Forge.PrintDB.getPrinterTypes().then(function (response) {
+			$.each(response, function (index, item) {
+				var inputPrinterType = $("#inputPrinterType");
+				var option = $('<option value="' + item.id + '">' + item.name + '</option>');
+				inputPrinterType.append(option);
+			});
+		});
+
+		common.setUIFunctionality();
+
+		$("#inputPrinterType").on("change", function (e) {
+
+			var id = $("#inputPrinterType option:selected").val();
+			if (id == -1) {
+				eventBroadCaster.broadcastEvent('showSimulator', true);
+			}
+			else {
+				eventBroadCaster.broadcastEvent('showSimulator', false);
+			}
+
+		});
+
+		$("#register-printer-form").on('submit', function (e) {
+			e.preventDefault();
+
+			if (common.validateInput($("#inputPrinterType")) && common.validateInput($('#inputName')) && common.validateInput($('#inputToken'))) {
+
+				var printerName = $('#inputName').val();
+
+				var token = $('#inputToken').val();
+
+				var id = $("#inputPrinterType option:selected").val();
+
+				if (id == -1) {
+					printerName = printerName + " ( simulator )";
+				}
+				Autodesk.Forge.Printer.register(printerName, token, "").then(function (response) {
+							eventBroadCaster.broadcastEvent("registerIframe.add")
+						},
+						function (response) {
+							$('#myModal').find(".modal-body").html("<span>" + response.message + "</span>");
+							$('#myModal').modal('show');
+						});
+			}
+		});
+
+		$('#myModal').on('click', '.cancel', function (e) {
+			e.preventDefault();
+			$('#myModal').modal('hide');
+		});
+	});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,512 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Spark Sample Application - Print</title>
+
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom styles -->
+	<link href='assets/css/common.css' rel='stylesheet'>
+
+	<style>
+		@font-face {
+			font-family:"digital";
+			src: url("plugins/portalSimulator/digital.ttf") /* TTF file for CSS3 browsers */
+		}
+
+		.lcd{
+			font-family: 'digital', sans-serif;
+			color: #00C6FF;
+			font-size: 20px;
+			letter-spacing: 20px;
+
+		}
+
+		.lcd-container{
+			width: 362px;
+			height: 76px;
+			background:url('assets/img/simulator_panel.png') no-repeat;
+			border-radius: 3px;
+			padding: 15px 30px 15px 30px;
+			text-align: center;
+		}
+
+		.simulator-row{
+			width: 680px;
+			margin-left: 1px;
+			padding-bottom: 10px;
+			padding-top: 25px;
+
+		}
+
+
+		.simulator-container
+		{
+
+			display: none;
+			width: 682px;
+			height: 108px;
+			background:url('assets/img/simulator_panel_bg.png') no-repeat;
+		}
+
+		.btn-simulator-container
+		{
+			margin-top: 10px;
+			color: #333333;
+			cursor: pointer;
+
+		}
+		.btn-simulator-container-center{
+			padding-right: 17px;
+			padding-left: 17px;
+		}
+
+		.btn-simulator-container-right{
+
+			padding-left: 17px;
+		}
+
+		.btn-simulator-container-left{
+			padding-right: 17px;
+			padding-left: 7px;
+		}
+
+		.btn-simulator-container-new-token{
+			padding-left: 14px;
+
+		}
+
+		.btn-simulator-container-border{
+			border-right: 1px solid #cccccc;
+		}
+
+
+		.btn-simulator-container .spark_icon
+		{
+			display: block;
+			text-align: center;
+			margin-bottom: 10px;
+
+		}
+
+		.resume-print .spark_icon{
+			margin-left: 10px;
+		}
+		.pause-print .spark_icon{
+			margin-left: 5px;
+		}
+		.cancel-print .spark_icon{
+			margin-left: 7px;
+		}
+
+		.create-new-token .spark_icon{
+			margin-left: 18px;
+		}
+
+		.tooltip.right {
+			padding: 0 5px;
+			margin-left: -75px;
+			margin-top: -40px;
+		}
+
+		.tooltip.left {
+			padding: 0 5px;
+			margin-left: 65px;
+			margin-top: -47px;
+		}
+
+	</style>
+
+	<script type="text/javascript" charset="utf-8" src="plugins/fullStory-integration.js"></script>
+
+</head>
+
+<body>
+
+<div class="logged-in-container">
+	<div class="container outer-container">
+		<div id="container" class="container sample-app-container">
+			<div class="sample-app-header clearfix">
+				<a href="" target="_blank" class="spark_icon pull-right si-popup-icon"  ></a>
+				<h5 class="sample-title">Forge Print Sample App</h5>
+			</div>
+			<div style="text-align: center;">
+				<ul class="nav nav-tabs sample-top-menu" role="tablist">
+					<li id="loginId">
+						<div id="user" class="pull-left" style="display: none;">
+							<img class="user-avatar" src=""/>
+						</div>
+						<a class="menu-item pull-left" data-state="login" role="tab">Log in</a>
+
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="manageId">
+						<a class="menu-item pull-left" data-state="manage" role="tab">Manage Printers</a>
+
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="printId">
+						<a class="menu-item pull-left" data-state="print" role="tab">Print Job</a>
+
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-right-arrow"></div>
+					</li>
+					<li id="statusId">
+						<a class="menu-item pull-left" data-state="status" role="tab">Job Status</a>
+
+						<div class="pull-left spark_icon si-status-ok">&nbsp;</div>
+						<div class="pull-left spark_icon si-status-disabled">&nbsp;</div>
+					</li>
+				</ul>
+			</div>
+			<div class="mainIframe-container">
+				<iframe name="mainIframe" id="mainIframe" scrolling="no" width="680px" height="523px" frameborder="0"
+				        src="examples/print/manage-printers.html"></iframe>
+			</div>
+
+
+			<div class="simulator-container">
+				<div class="row simulator-row">
+
+					<div class="col-xs-8 no-padding pull-left">
+						<div class="new-token" style="display: none;"></div>
+						<div class="create-new-token btn-simulator-container btn-simulator-container-new-token pull-left"
+						     aria-label="Left Align" data-toggle="tooltip" data-placement="right"
+						     data-original-title="Shutdown current printer and get new registration token">
+							<div class="spark_icon print-si-new-token-light" aria-hidden="true"></div>
+							New Token
+						</div>
+						<div class="lcd-container pull-right">
+							<div class="center-block lcd "></div>
+						</div>
+					</div>
+
+					<div class="col-xs-4 no-padding pull-right">
+
+						<div class="resume-print btn-simulator-container btn-simulator-container-left btn-simulator-container-border pull-left"
+						     aria-label="Left Align" data-toggle="tooltip" data-placement="top"
+						     data-original-title="Resume Print Job">
+							<div class="spark_icon print-si-play-light" aria-hidden="true"></div>
+							Resume
+						</div>
+
+
+						<div class="pause-print btn-simulator-container btn-simulator-container-center btn-simulator-container-border pull-left"
+						     aria-label="Left Align" data-toggle="tooltip" data-placement="top"
+						     data-original-title="Pause Print Job">
+							<div class="spark_icon print-si-pause-light" aria-hidden="true"></div>
+							Pause
+						</div>
+
+						<div class="cancel-print btn-simulator-container btn-simulator-container-right pull-left"
+						     aria-label="Left Align" data-toggle="tooltip" data-placement="left"
+						     data-original-title="Cancel Print Job">
+							<div class="spark_icon print-si-close-light" aria-hidden="true"></div>
+							Cancel
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="footer"></div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4>WARNING</h4>
+			</div>
+			<div class="modal-body">
+				Generating a new token will disconnect your current printer simulator, are you sure?
+			</div>
+			<div class="modal-footer">
+				<a class="spark_btn small cancel" type="button">CANCEL</a>
+				<a class="spark_btn primary small generate" type="button">Generate</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- /container -->
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="appModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
+				<h2>Spark Sample App</h2>
+			</div>
+			<div class="modal-body">
+				This is an open source Print API demo sample app.
+			</div>
+			<div class="modal-footer">
+				<a class="spark_btn primary large" type="button" onclick="$('#appModal').modal('hide')">Run the sample code</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- forge sdk -->
+<script type="text/javascript" charset="utf-8" src="vendor/forge-js-sdk/src/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/forge-js-sdk/src/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/forge-js-sdk/src/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="vendor/forge-js-sdk/src/Client.js"></script>
+
+<script type='text/javascript' charset='utf-8' src='scripts/config.js'></script>
+<script type='text/javascript' charset='utf-8' src='scripts/init.js'></script>
+
+<script type='text/javascript' charset='utf-8' src='//code.jquery.com/jquery-2.1.3.min.js'></script>
+<script type='text/javascript' charset='utf-8' src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>
+
+<script type='text/javascript' charset='utf-8' src='scripts/common.js'></script>
+
+<script type='text/javascript' charset='utf-8' src='plugins/ajaxlogger/renderjson.js'></script>
+<script type='text/javascript' charset='utf-8' src='plugins/ajaxlogger/ajaxCallListener.js'></script>
+
+<script type='text/javascript' charset='utf-8' src='plugins/ajaxlogger/ajaxCallLogger.js'></script>
+
+<script type='text/javascript' charset='utf-8' src='plugins/state/statePlugin.js'></script>
+<script type='text/javascript' charset='utf-8' src='plugins/broadcaster/broadcastEventListener.js'></script>
+<script type='text/javascript' charset='utf-8' src='plugins/dom-animator.min.js'></script>
+
+
+
+<script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/faye-browser.js"></script>
+<script type="text/javascript" charset="utf-8" src="plugins/portalSimulator/printer.js"></script>
+
+<script>
+
+	$(document).ready(function(){
+		ajaxCallLogger.init(API_BASE_URL + '/');
+		ajaxCallLogger.createLoggerElement(".footer");
+		ajaxCallLogger.startIframeListener();
+
+		broadcastEventListener.startIframeBroadcastListener();
+
+		if (Autodesk.Forge.Client.isAccessTokenValid()) {
+			isLoggedIn = true;
+			statePlugin.changeState('manage');
+			statePlugin.verifyState("login");
+			//$('#mainIframe').attr('height', '462px');
+
+			Autodesk.Forge.Client.getMyProfile().then(function(response){
+				console.log(response.profileImages.sizeX20);
+				if (response.profileImages.sizeX40 != undefined) {
+					$('#user img').attr('src', Autodesk.Forge.Helpers.changeHttpToHttps(response.profileImages.sizeX40));
+					$('#user').show();
+				}
+				else{
+					$('#user img').attr('src', Autodesk.Forge.Helpers.changeHttpToHttps("../../assets/img/default_avatar.png"));
+					$('#user').show();
+				}
+			});
+		}
+		else{
+			if (!common.extractParamsFromURL().popup) {
+				$('#appModal').modal('show');
+			}
+			isLoggedIn = false;
+			statePlugin.changeState('login');
+			//$('#mainIframe').attr('height', '523px');
+		}
+
+		$(".menu-item").click(function(e){
+			e.preventDefault();
+			var state = $(this).data("state");
+			statePlugin.changeState(state);
+			showSimulator(false);
+		});
+
+		$(".create-new-token").click(function(e){
+			e.preventDefault();
+			$("#myModal").modal('show');
+		});
+
+		$(".generate").click(function(e){
+			e.preventDefault();
+			$("#myModal").modal('hide');
+			$(".new-token").click();
+		});
+
+		$(".cancel").click(function(e){
+			e.preventDefault();
+			$("#myModal").modal('hide');
+		});
+
+	});
+
+
+	var loggedOutCallback = function(){
+		//$('#mainIframe').attr('height', '523px');
+	}
+
+	var states = {
+		login:{
+			"src":"plugins/login/login.html",
+			selectedTab:"#loginId",
+			enabledTabs:[],
+			disabledTabs:["#printId","#registerId","#statusId","#manageId"],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '550px');
+			}
+		},
+
+		manage:{
+			"src":"examples/print/manage-printers.html",
+			selectedTab:"#manageId",
+			enabledTabs:["#loginId", "#manageId","#registerId"],
+			disabledTabs:["#printId","#statusId"],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+			}
+		},
+
+		register:{
+			"src":"examples/print/register-printer.html",
+			selectedTab:"#manageId",
+			enabledTabs:["#loginId","#manageId","#registerId"],
+			disabledTabs:["#printId","#statusId"],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+			}
+		},
+
+
+		print:{
+			"src":"examples/print/create-print-job.html",
+			selectedTab:"#printId",
+			enabledTabs:["#loginId","#manageId","#registerId","#printId", "#statusId"],
+			disabledTabs:[],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+			}
+		},
+
+		choose_file:{
+			"src":"examples/print/choose-file.html?assetId=1513630",
+			selectedTab:"#printId",
+			enabledTabs:["#loginId","#manageId","#registerId", "#statusId"],
+			disabledTabs:[],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+			}
+		},
+
+
+		status:{
+			"src":"examples/print/printer-status.html",
+			selectedTab:"#statusId",
+			enabledTabs:["#loginId","#manageId","#printId","#registerId","#statusId"],
+			disabledTabs:[],
+			callbackFunc: function () {
+				$('#mainIframe').attr('height', '523px');
+			}
+		}
+
+	};
+
+	var showSimulator = function(show){
+		if(show == true){
+			$('.simulator-container').animate({height: 'show'}, 290);
+		}
+		else{
+			$('.simulator-container').animate({height: 'hide'}, 290);
+		}
+	};
+
+	var isLoggedIn = false;
+
+	var broadcastMapper = [];
+
+
+	broadcastMapper['manageIframe.loggedOut']  = function(optionalParams){
+		isLoggedIn = false;
+		$('#user').hide();
+		statePlugin.changeState('login');
+		statePlugin.unVerifyAll();
+	};
+
+	broadcastMapper["manageIframe.loggedIn"] = function(optionalParams){
+
+		if(!isLoggedIn || (optionalParams && optionalParams.forceRedirect)) {
+			statePlugin.changeState("manage", optionalParams);
+			statePlugin.verifyState("login");
+			isLoggedIn = true;
+		}
+	};
+	broadcastMapper["manageIframe.continueClick"] = function(optionalParams){
+		statePlugin.changeState("print",optionalParams);
+	};
+	broadcastMapper["manageIframe.addClick"] = function(optionalParams){
+		statePlugin.changeState("register",optionalParams);
+	};
+	broadcastMapper["registerIframe.cancel"] = function(optionalParams){
+		statePlugin.changeState("manage",optionalParams);
+		showSimulator(false);
+	};
+	broadcastMapper["registerIframe.add"] = function(optionalParams){
+		statePlugin.changeState("manage",optionalParams);
+		showSimulator(false);
+	};
+	broadcastMapper["manageIframe.reload"] = function(optionalParams){
+		statePlugin.changeState("manage",optionalParams);
+		showSimulator(false);
+	};
+
+	broadcastMapper["printIframe.chooseFile"] = function(optionalParams){
+		statePlugin.changeState("choose_file",optionalParams);
+		showSimulator(false);
+	};
+
+	broadcastMapper["showSimulator"] = function(show){
+		showSimulator(show);
+	};
+
+	broadcastMapper["statusIframe.printerExist"] = function(){
+		statePlugin.verifyState("status");
+	};
+	broadcastMapper["manageIframe.printerExist"] = function(){
+		statePlugin.verifyState("manage");
+	};
+	broadcastMapper["printIframe.jobExist"] = function(optionalParams){
+		statePlugin.changeState("status",optionalParams);
+		statePlugin.verifyState("print");
+	};
+
+	broadcastMapper['manageIframe.loggedOutNoRefresh']= function(optionalParams){
+		loggedOutCallback();
+	};
+
+
+</script>
+
+
+
+
+
+</body>
+</html>

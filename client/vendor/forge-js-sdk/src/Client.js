@@ -58,8 +58,8 @@ Autodesk.Forge = Autodesk.Forge || {};
 
     /**
      * @description - Completes the login process, gets an access_token and stores it in localStorage.
-     * @memberOf ADSKSpark.Client
-     * @param {String} code - The code that was returned after the user signed in. {@see ADSKSpark.Client#login}
+     * @memberOf Autodesk.Forge.Client
+     * @param {String} code - The code that was returned after the user signed in. {@see Autodesk.Forge.Client#login}
      * @returns {Promise} - A promise that resolves to the access token.
      */
     var complete3LeggedFlow = function (code) {

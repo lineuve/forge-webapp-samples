@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Spark Sample Application - Show My Assets - files</title>
+	<meta charset="utf-8">
+
+	<!-- Bootstrap core CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Common styles -->
+	<link href="../../assets/css/common.css" rel="stylesheet">
+
+	<style>
+
+
+		.in-table img {
+			height: 120px;
+			width: 120px;
+		}
+
+		.table td {
+			/**padding: 10px!important;*/
+			text-align: left;
+
+		}
+
+		.table>tbody>tr>td{
+			border-top: none;
+		}
+
+		#assetsTbody {
+			font: 10pt normal Arial, sans-serif;
+			height: auto;
+			margin: 80px auto 0 auto;
+			text-align: center;
+			width: 660px;
+		}
+
+		.premade-box {
+			cursor: pointer;
+			height: 120px;
+			float: left;
+
+			position: relative;
+			overflow: hidden;
+			width: 120px;
+			-webkit-box-shadow: 1px 1px 1px 1px #ccc;
+			-moz-box-shadow: 1px 1px 1px 1px #ccc;
+			/**
+					border: 5px solid #fff;
+					margin: 5px;
+					box-shadow: 1px 1px 1px 1px #ccc;
+			*/
+		}
+
+		.premade-box img {
+			position: absolute;
+			left: 0;
+			-webkit-transition: all 300ms ease-out;
+			-moz-transition: all 300ms ease-out;
+			-o-transition: all 300ms ease-out;
+			-ms-transition: all 300ms ease-out;
+			transition: all 300ms ease-out;
+		}
+
+		.simple-caption {
+			background-color: rgba(255, 255, 255, 0.8);
+			position: absolute;
+			color: #333;
+			z-index: 100;
+			-webkit-transition: all 300ms ease-out;
+			-moz-transition: all 300ms ease-out;
+			-o-transition: all 300ms ease-out;
+			-ms-transition: all 300ms ease-out;
+			transition: all 300ms ease-out;
+			left: 0;
+
+			height: 50px;
+			width: 120px;
+			display: block;
+			bottom: -30px;
+			/**line-height: 25pt;*/
+			text-align: center;
+			font-size: 14px;
+
+		}
+
+		td div.description {
+			margin-top: 20px;
+		}
+
+		hr{
+			margin-bottom: 0;
+		}
+	</style>
+
+</head>
+
+<body>
+<div class="container">
+
+	<div class="spinner-with-text">
+		<div id="spinner-text"></div>
+		<div class="spinner"></div>
+	</div>
+	<div class="sample-title">Choose file</div>
+	<hr>
+	<div class="hidden" id="assets-files">
+		<table class="table">
+			<tbody id="assetsTbody">
+			</tbody>
+		</table>
+	</div>
+
+</div>
+<!-- /container -->
+
+
+<script type="text/javascript" charset="utf-8" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!-- forge sdk -->
+<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/Constants.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/Helpers.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/Request.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/Client.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../vendor/forge-js-sdk/src/dm/Oss.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../../plugins/login/login.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../scripts/config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../scripts/init.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../scripts/common.js"></script>
+
+<!-- Enable broadcasting events and logging requests to top window -->
+<script type="text/javascript" charset="utf-8" src="../../plugins/broadcaster/eventBroadcaster.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../plugins/ajaxlogger/ajaxCallListener.js"></script>
+
+<script>
+
+	//log http requests
+	ajaxCallListenerFromIframe();
+
+	var defaultBucket = DEFAULT_BUCKET;
+
+
+	var predefinedAssets = [
+		{
+			name: "Bear.gcode",
+			size: "19KB",
+			fileUrl: "http://static.spark.autodesk.com/Public/Beta/17743501.stl",
+			pic: "https://static.spark.autodesk.com/Beta/2015/07/27__13_41_25/bear.png9af6e440-3911-11e5-bdff-22000b538c89Medium.jpg"
+		},
+		{
+			name: "Pepper.gcode",
+			size: "2.4MB",
+			fileUrl: "http://static.spark.autodesk.com/Public/Beta/17729449.stl",
+			pic: "https://static.spark.autodesk.com/Beta/2015/07/27__13_41_25/pepper.png87017da3-3911-11e5-bdff-22000b538c89Medium.jpg"
+		},
+		{
+			name: "Aardvark.gcode",
+			size: "20KB",
+			fileUrl: "http://static.spark.autodesk.com/Public/Beta/17747097.stl",
+			pic: "https://static.spark.autodesk.com/Beta/2015/07/27__13_41_25/advark.png6f1bde11-3911-11e5-bdff-22000b538c89Medium.jpg"
+		}
+	];
+	/**
+	 * Fetch the asset and it's metadata and set data in the DOM
+	 */
+	function setupAssetFiles() {
+		var isQuick = Autodesk.Forge.Helpers.extractParamsFromURL().isQuick;
+
+		var tr = $('<tr class="in-table"></tr>');
+
+		$.each(predefinedAssets, function (index, item) {
+
+			var tr = $('<tr class="in-table"></tr>');
+			tr.append($('<td><div class="premade-box">' + '<img src="' + item.pic + '"/>' +
+					'<span class="caption simple-caption"><p>' + item.name + '</p></span>' + +'</div></td>'));
+
+			tr.append($('<td><div class="description">' + item.size + '</div></td>'));
+
+
+			$(tr).on('click', function (e) {
+				upload(item.name,isQuick);
+
+			});
+
+			$('#assetsTbody').append(tr);
+		});
+		$('.spinner').hide();
+
+		$('#assets-files').removeClass('hidden');
+	}
+
+	var errorResp = function (error) {
+		console.error(error);
+		$('#messageError').show();
+	};
+
+	function upload(fileName,isQuick) {
+		//nice UI
+		$('.spinner-with-text').show();
+		$('.spinner').show();
+		$('#spinner-text').text('Loading...');
+
+		$('#assets-files').hide();
+
+
+		//get or create a bucket into which we upload the file
+		var createBucketObj = {bucketKey: defaultBucket, policyKey: 'temporary'};
+		Autodesk.Forge.OSS.getOrCreateBucket(defaultBucket, createBucketObj).then(function (bucketResponse) {
+
+			//upload the selected file from the server
+			Autodesk.Forge.Request(AUTH_SERVER_URL + '/upload_file?fileName=' + fileName + '&bucketKey=' + defaultBucket,
+					null, {withCredentials: true}).put().then(function (result) {
+						console.log("after upload");
+						console.log(result);
+						window.location.href = '../upload.html?objectId=' + result.objectId + '&objectKey=' + result.objectKey + '&isQuick=' + isQuick;
+					}, errorResp);
+		}, errorResp);
+	}
+
+
+	/**
+	 * Run when DOM is ready.
+	 * The spark object already exists in this point
+	 */
+	jQuery(function ($) {
+
+		//First let's see if we have a valid access token
+		if (!Autodesk.Forge.Client.isTokenExist()) {
+			location.href = '../../plugins/login/login.html';
+		} else {
+			setupAssetFiles();
+		}
+
+	});
+
+</script>
+
+</body>
+</html>
