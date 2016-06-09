@@ -22,7 +22,7 @@ var Printer= (function() {
 	var FAYE_URL="https://printer-forge-dev.spark.autodesk.com/faye";
 
 	var BASE_URL_LOCAL="http://localhost:8080/api/v1";
-	var FAYE_URL_LOCAL="http://localhost:8080/faye"
+	var FAYE_URL_LOCAL="http://localhost:8080/faye";
 
 
 

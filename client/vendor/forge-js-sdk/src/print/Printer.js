@@ -360,9 +360,7 @@ Autodesk.Forge = Autodesk.Forge || {};
          * @param {string} callbackUrl
          * @returns {Promise}
          */
-        createJob: function (printableId, printableUrl, settings, callbackUrl) {
-
-            var jobName = printableId ? printableId : printableUrl;
+        createJob: function (jobName, printableId, printableUrl, settings, callbackUrl) {
 
             var headers = {'Content-Type': 'application/json'},
                 payload = JSON.stringify({

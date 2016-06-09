@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Spark Sample Application - Show My Assets - files</title>
+	<title>Forge Sample Application</title>
 	<meta charset="utf-8">
 
 	<!-- Bootstrap core CSS -->
@@ -167,7 +167,6 @@
 	 * Fetch the asset and it's metadata and set data in the DOM
 	 */
 	function setupAssetFiles() {
-		var isQuick = Autodesk.Forge.Helpers.extractParamsFromURL().isQuick;
 
 		var tr = $('<tr class="in-table"></tr>');
 
@@ -181,7 +180,7 @@
 
 
 			$(tr).on('click', function (e) {
-				upload(item.name,isQuick);
+				upload(item.name);
 
 			});
 
@@ -197,7 +196,7 @@
 		$('#messageError').show();
 	};
 
-	function upload(fileName,isQuick) {
+	function upload(fileName) {
 		//nice UI
 		$('.spinner-with-text').show();
 		$('.spinner').show();
@@ -215,7 +214,7 @@
 					null, {withCredentials: true}).put().then(function (result) {
 						console.log("after upload");
 						console.log(result);
-						window.location.href = '../upload.html?objectId=' + result.objectId + '&objectKey=' + result.objectKey + '&isQuick=' + isQuick;
+						window.location.href = '../print/create-print-job.html?objectId=' + result.objectId + '&objectKey=' + result.objectKey;
 					}, errorResp);
 		}, errorResp);
 	}

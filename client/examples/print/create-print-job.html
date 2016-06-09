@@ -205,7 +205,7 @@
 
 	<script>
 
-	var currentFileId;
+	var currentFileId, currentFileKey;
 	var printersArray = [];
 
 	var getAllPrinters = function(){
@@ -239,10 +239,12 @@
 		common.setUIFunctionality();
 
 		var urlParams =  Autodesk.Forge.Helpers.extractParamsFromURL();
-		currentFileId = urlParams['fileId'] ? urlParams['fileId'] : "";
+		currentFileId = urlParams['objectId'] ? urlParams['objectId'] : "";
+		currentFileKey = urlParams['objectId'] ? urlParams['objectKey'] : "";
+
 		if (currentFileId != "") {
 			//sending a printable url of a file that was created via the tray
-			var url = "http://static.spark.autodesk.com/Public/Beta/" + currentFileId + ".gcode";
+			var url = currentFileId;
 			$("#fileUrl").val(url);
 		}
 
@@ -274,7 +276,7 @@
 					var job = new Autodesk.Forge.Job(undefined);
 
 					var printer = getPrinterById(printerId);
-					printer.createJob("", fileUrl, settings, "").then(function (response) {
+					printer.createJob(currentFileKey, "", fileUrl, settings, "").then(function (response) {
 								eventBroadCaster.broadcastEvent('printIframe.jobExist');
 							},
 							function (response) {
