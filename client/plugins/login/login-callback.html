@@ -7,7 +7,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>Spark Sample Application Callback</title>
+	<title>Forge Sample Application Callback</title>
 </head>
 
 <body>
@@ -29,29 +29,28 @@
 	//log http requests
 	ajaxCallListenerFromIframe();
 
-	var isServerLogin = (window.location.search.indexOf('code') != -1);
+	var urlParams = Autodesk.Forge.Helpers.extractParamsFromURL();
 
-	Autodesk.Forge.Client.completeLogin(isServerLogin).then(function (token) {
-		console.log('Completed login with token: ' + token);
+	if (urlParams.error){
+		console.log('error');
+		document.write(urlParams.error_description);
+	}else {
+		Autodesk.Forge.Client.completeLogin().then(function (token) {
+			console.log('Completed login with token: ' + token);
 
-		if (token) {
-
-			// for Segment analytics
-			if(typeof analytics!='undefined'){
-				analytics.track('Sample App User Signed In',{url:parent.location.href});
+			if (token) {
+				if (window.opener) {
+					window.opener.location.reload(true);
+					//close the login window
+					window.close();
+				} else {
+					window.parent.location.reload();
+				}
+			} else {
+				console.error('Problem with fetching token');
 			}
-
-			if (window.opener){
-				window.opener.location.reload(true);
-				//close the login window
-				window.close();
-			}else {
-				window.parent.location.reload();
-			}
-		} else {
-			console.error('Problem with fetching token');
-		}
-	});
+		});
+	}
 
 
 </script>
