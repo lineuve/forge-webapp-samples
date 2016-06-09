@@ -27,7 +27,7 @@ var CLIENT_ID = CLIENT_ID || '',
 	REDIRECT_URI = REDIRECT_URI || '',
 	ENV = ENV || 'dev',
     API_BASE_URL,
-    DEFAULT_BUCKET = 'forge_healing_utility_' + CLIENT_ID.toLowerCase();
+    DEFAULT_BUCKET = 'forge_sample_app_' + CLIENT_ID.toLowerCase();
 
 
 switch(ENV) {
