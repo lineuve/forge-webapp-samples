@@ -18,13 +18,11 @@ var Printer= (function() {
 	//var FAYE_URL="https://api-alpha.spark.autodesk.com/faye";
 
 
-	var BASE_URL="https://printer-forge-dev.spark.autodesk.com/v1";
-	var FAYE_URL="https://printer-forge-dev.spark.autodesk.com/faye";
+	var BASE_URL="https://printer-forge-stage.spark.autodesk.com/v1";
+	var FAYE_URL="https://printer-forge-stage.spark.autodesk.com/faye";
 
 	var BASE_URL_LOCAL="http://localhost:8080/api/v1";
 	var FAYE_URL_LOCAL="http://localhost:8080/faye";
-
-
 
 	var BASE_URL_ALPHA="http://alpha.spark.autodesk.com/api/v1";
 	var FAYE_URL_ALPHA="http://alpha.spark.autodesk.com/faye";

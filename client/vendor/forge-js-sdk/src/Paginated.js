@@ -38,7 +38,7 @@ Autodesk.Forge = Autodesk.Forge || {};
                 that = this;
 
             if (linkPrev) {
-                return Client.authorizedApiRequest(linkPrev)
+                return Client.authorized3LeggedApiRequest(linkPrev)
                     .get()
                     .then(function (data) {
                         that.parse(data);
@@ -68,7 +68,7 @@ Autodesk.Forge = Autodesk.Forge || {};
                 that = this;
 
             if (linkNext) {
-                return Client.authorizedApiRequest(linkNext)
+                return Client.authorized3LeggedApiRequest(linkNext)
                     .get()
                     .then(function (data) {
                         that.parse(data);
